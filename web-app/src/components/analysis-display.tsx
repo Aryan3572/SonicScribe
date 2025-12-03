@@ -75,15 +75,16 @@ export default function AnalysisDisplay({ analysis }: AnalysisDisplayProps) {
     if (text.includes("Name:") && text.includes("Symptoms:")) {
       // Split by common section headers to extract each part
       const sections = [
-            { key: "name", pattern: /Name:([\s\S]+?)(?=Age\/Gender:|Medical History:|Symptoms:|$)/ },
-            { key: "ageGender", pattern: /Age\/Gender:([\s\S]+?)(?=Medical History:|Symptoms:|$)/ },
-            { key: "medicalHistory", pattern: /Medical History:([\s\S]+?)(?=Symptoms:|$)/ },
-            { key: "symptoms", pattern: ymptoms:([\s\S]+?)(?=Notes:|Risk Prediction:|Possible Disease:|Recommendation:|$)/ },
-            { key: "notes", pattern: /Notes:([\s\S]+?)(?=Risk Prediction:|Possible Disease:|Recommendation:|$)/ },
-            { key: "riskPrediction", pattern: /Risk Prediction:([\s\S]+?)(?=Possible Disease:|Recommendation:|$)/ },
-            { key: "possibleDisease", pattern: /Possible Disease:([\s\S]+?)(?=Recommendation:|$)/ },
-            { key: "recommendation", pattern: /Recommendation:([\s\S]+?)$/ },
-          ];
+          { key: "name", pattern: /Name:([\s\S]+?)(?=Age\/Gender:|Medical History:|Symptoms:|$)/ },
+          { key: "ageGender", pattern: /Age\/Gender:([\s\S]+?)(?=Medical History:|Symptoms:|$)/ },
+          { key: "medicalHistory", pattern: /Medical History:([\s\S]+?)(?=Symptoms:|$)/ },
+          { key: "symptoms", pattern: /Symptoms:([\s\S]+?)(?=Notes:|Risk Prediction:|Possible Disease:|Recommendation:|$)/ },
+          { key: "notes", pattern: /Notes:([\s\S]+?)(?=Risk Prediction:|Possible Disease:|Recommendation:|$)/ },
+          { key: "riskPrediction", pattern: /Risk Prediction:([\s\S]+?)(?=Possible Disease:|Recommendation:|$)/ },
+          { key: "possibleDisease", pattern: /Possible Disease:([\s\S]+?)(?=Recommendation:|$)/ },
+          { key: "recommendation", pattern: /Recommendation:([\s\S]+?)$/ },
+        ]
+
 
       // Extract each section
       sections.forEach((section) => {
@@ -161,7 +162,7 @@ export default function AnalysisDisplay({ analysis }: AnalysisDisplayProps) {
           <TooltipProvider key={index}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <span className="underline decoration-dotted decoration-blue-400 cursor-help">{term}<pan>
+                <span className="underline decoration-dotted decoration-blue-400 cursor-help">{term}</span>
               </TooltipTrigger>
               <TooltipContent className="max-w-xs bg-gray-800 text-white border-gray-700">
                 <p>{medicalTerms[term] || term}</p>
@@ -229,7 +230,7 @@ export default function AnalysisDisplay({ analysis }: AnalysisDisplayProps) {
           </TooltipProvider>
         </div>
       </div>
-
+      
       {/* Tabs Navigation */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid grid-cols-2 bg-gray-800">
@@ -335,7 +336,7 @@ export default function AnalysisDisplay({ analysis }: AnalysisDisplayProps) {
                               <div className="w-2 h-2 bg-red-400 rounded-full" />
                               <span className="text-gray-200">
                                 {highlightMedicalTerms(symptom.replace(/^[â€¢\-*]\s*/, "").trim())}
-                              <pan>
+                              </span>
                             </motion.div>
                           ))}
                         </div>
@@ -436,8 +437,8 @@ export default function AnalysisDisplay({ analysis }: AnalysisDisplayProps) {
 
                           <div className="space-y-2">
                             <div className="flex justify-between items-center">
-                              <span className="text-sm text-gray-400">Risk Level<pan>
-                              <span className="text-sm font-medium text-white capitalize">{riskLevel.level}<pan>
+                              <span className="text-sm text-gray-400">Risk Level</span>
+                              <span className="text-sm font-medium text-white capitalize">{riskLevel.level}</span>
                             </div>
                             <Progress
                               value={riskLevel.percent}

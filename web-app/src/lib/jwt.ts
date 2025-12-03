@@ -1,15 +1,23 @@
-import jwt from "jsonwebtoken";
+import jwt, { SignOptions } from "jsonwebtoken";
 
-const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key"; // Use a strong secret key
+const JWT_SECRET: jwt.Secret =
+  process.env.JWT_SECRET || "your-secret-key";
 
-export function signJwt(payload: object, expiresIn = "1h") {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn });
+export function signJwt(
+  payload: object,
+  expiresIn: SignOptions["expiresIn"] = "1h"
+) {
+  const options: SignOptions = {
+    expiresIn,
+  };
+
+  return jwt.sign(payload, JWT_SECRET, options);
 }
 
 export function verifyJwt(token: string) {
   try {
     return jwt.verify(token, JWT_SECRET);
-  } catch (error) {
+  } catch {
     return null;
   }
 }
