@@ -1,0 +1,51 @@
+services:
+  - type: web
+    name: flask-app1
+    env: docker
+    repo: https://github.com/abhijeetmishra2104/SonicScribe
+    dockerfilePath: ai-model/app1/Dockerfile
+    plan: free
+    region: singapore
+    buildFilter:
+      paths:
+        - ai-model/app1/app.py
+        - ai-model/app1/requirements.txt
+        - ai-model/app1/Dockerfile
+    envVars:
+      - key: FLASK_ENV
+        value: development
+    autoDeploy: true
+
+  - type: web
+    name: flask-app2
+    env: docker
+    repo: https://github.com/abhijeetmishra2104/SonicScribe
+    dockerfilePath: ai-model/app2/Dockerfile
+    plan: free
+    region: singapore
+    buildFilter:
+      paths:
+        - ai-model/app2/app.py
+        - ai-model/app2/requirements.txt
+        - ai-model/app2/Dockerfile
+    envVars:
+      - key: FLASK_ENV
+        value: development
+    autoDeploy: true
+
+  - type: web
+    name: flask-app4
+    env: docker
+    repo: https://github.com/abhijeetmishra2104/SonicScribe
+    dockerfilePath: ai-model/app4/Dockerfile
+    plan: free
+    region: singapore
+    buildFilter:
+      paths:
+        - ai-model/app4/app.py
+        - ai-model/app4/requirements.txt
+        - ai-model/app4/Dockerfile
+    envVars:
+      - key: FLASK_ENV
+        value: development
+    autoDeploy: true

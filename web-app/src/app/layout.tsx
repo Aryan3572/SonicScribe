@@ -17,27 +17,9 @@ const sourceSerif4 = Source_Serif_4({
   display: "swap",
 });
 
-  export const metadata: Metadata = {
+export const metadata: Metadata = {
   title: "SonicScribe AI",
   description: "Intelligence that Listens. Precision that Heals.",
-  authors: [{ name: "Aryan Raj", url: "https://github.com/Aryan3572" }],
-  creator: "Aryan Raj",
-  publisher: "Aryan Raj",
-  metadataBase: new URL("https://sonicscribe-aryan.vercel.app"),
-  openGraph: {
-    title: "SonicScribe AI",
-    description: "Intelligence that Listens. Precision that Heals.",
-    url: "https://sonicscribe-aryan.vercel.app",
-    siteName: "SonicScribe AI",
-    type: "website",
-  },
-  keywords: [
-    "SonicScribe",
-    "Medical AI",
-    "Audio Intelligence",
-    "Healthcare AI",
-    "Aryan Raj",
-  ],
 };
 
 export default function RootLayout({
