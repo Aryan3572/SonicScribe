@@ -8,7 +8,8 @@ export async function POST(req: NextRequest) {
     
     const FLASK_APP4 = process.env.NEXT_PUBLIC_FLASK_APP4!;
 
-    const response = await fetch(`${FLASK_APP4}/api/predict`, {
+    const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_RISK_URL!
+, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),

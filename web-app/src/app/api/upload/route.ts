@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
 const FLASK_APP2 = process.env.NEXT_PUBLIC_FLASK_APP2!
 
   // 🔥 Send the Cloudinary URL to Flask app
-  const flaskResponse = await fetch(`${FLASK_APP1}/process-audio-url`, {
+  const flaskResponse = await fetch(process.env.NEXT_PUBLIC_BACKEND_UPLOAD_URL!, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ url: result.secure_url }),

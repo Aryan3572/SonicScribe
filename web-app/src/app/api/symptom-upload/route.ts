@@ -21,7 +21,7 @@ const FLASK_APP2 = process.env.NEXT_PUBLIC_FLASK_APP2!;
   }
 
   try {
-    const response = await fetch(`${FLASK_APP2}/analyze`, {
+    const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_SYMPTOM_URL!, {
       method: 'POST',
       body: flaskFormData as any,
     });

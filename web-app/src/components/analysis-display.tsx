@@ -113,18 +113,21 @@ export default function AnalysisDisplay({ analysis }: AnalysisDisplayProps) {
   console.log("Parsed data:", data)
 
   // Calculate risk level based on text
-  const getRiskLevel = () => {
-    if (!data.riskPrediction) return { level: "unknown", percent: 50 }
-
-    const text = data.riskPrediction.toLowerCase()
-    if (text.includes("high risk") || text.includes("severe")) {
-      return { level: "high", percent: 85 }
-    } else if (text.includes("medium risk") || text.includes("moderate")) {
-      return { level: "medium", percent: 50 }
-    } else {
-      return { level: "low", percent: 25 }
-    }
+const getRiskLevel = () => {
+  if (!data?.riskPrediction || typeof data.riskPrediction !== "string") {
+    return { level: "unknown", percent: 0 };
   }
+
+  const text = data.riskPrediction.toLowerCase();
+
+  if (text.includes("high risk") || text.includes("severe")) {
+    return { level: "high", percent: 85 };
+  } else if (text.includes("medium risk") || text.includes("moderate")) {
+    return { level: "medium", percent: 50 };
+  } else {
+    return { level: "low", percent: 25 };
+  }
+};
 
   const riskLevel = getRiskLevel()
 
