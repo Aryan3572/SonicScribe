@@ -441,15 +441,17 @@ export default function AnalysisDisplay({ analysis }: AnalysisDisplayProps) {
                             </div>
                             <Progress
                               value={riskLevel.percent}
-                              className="h-2 bg-gray-700"
-                              indicatorClassName={`${
-                                riskLevel.level === "high"
-                                  ? "bg-red-500"
-                                  : riskLevel.level === "medium"
+                              className={`h-2 bg-gray-700
+                                [&>div]:${
+                                  riskLevel.level === "high"
+                                    ? "bg-red-500"
+                                    : riskLevel.level === "medium"
                                     ? "bg-orange-500"
                                     : "bg-green-500"
-                              }`}
+                                }
+                              `}
                             />
+
                           </div>
                         </div>
                       </CardContent>
