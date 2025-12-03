@@ -1,4 +1,4 @@
-import { dirname } from "path";
+﻿import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { FlatCompat } from "@eslint/eslintrc";
 
@@ -11,18 +11,14 @@ const compat = new FlatCompat({
 
 export default [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
-
   {
     rules: {
-      // Disable all warnings that break Vercel builds
       "react-hooks/exhaustive-deps": "off",
       "@typescript-eslint/no-unused-vars": "off",
       "@typescript-eslint/no-empty-object-type": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-unused-expressions": "off",
       "prefer-const": "off",
-
-      // NEW FIX: allow apostrophes in JSX text
       "react/no-unescaped-entities": "off"
     }
   }

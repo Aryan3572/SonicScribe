@@ -1,6 +1,6 @@
-'use client'
+﻿'use client'
 import { Separator } from "@/components/ui/separator"
-import { Github, Twitter, Mail } from "lucide-react"
+import { Github, Mail } from "lucide-react"
 
 export default function Footer() {
   return (
@@ -13,22 +13,12 @@ export default function Footer() {
         <Separator className="md:hidden" />
 
         <div className="flex gap-4">
-
-          {/* Your GitHub */}
           <a href="https://github.com/Aryan3572" target="_blank" rel="noopener noreferrer">
             <Github className="h-5 w-5 hover:text-foreground transition-colors" />
           </a>
-
-          {/* Your Twitter/X */}
-          <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer">
-            <Twitter className="h-5 w-5 hover:text-foreground transition-colors" />
-          </a>
-
-          {/* Your Email */}
           <a href="mailto:rajaryan3572@gmail.com">
             <Mail className="h-5 w-5 hover:text-foreground transition-colors" />
           </a>
-
         </div>
       </div>
     </footer>
