@@ -7,6 +7,9 @@ export async function POST(req: NextRequest) {
 
   const flaskFormData = new FormData();
 
+  
+const FLASK_APP2 = process.env.NEXT_PUBLIC_FLASK_APP2!;
+
   if (textInput) {
     flaskFormData.append('text_input', textInput);
   }
@@ -18,10 +21,10 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const response = await fetch('http://flask-app2:5001/analyze', {
-  method: 'POST',
-  body: flaskFormData as any,
-});
+    const response = await fetch(`${FLASK_APP2}/analyze`, {
+      method: 'POST',
+      body: flaskFormData as any,
+    });
 
 const data = await response.json();
 

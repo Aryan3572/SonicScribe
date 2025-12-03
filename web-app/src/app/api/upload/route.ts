@@ -4,6 +4,7 @@ import { PrismaClient } from '@prisma/client';
 import { Readable } from 'stream';
 
 const prisma = new PrismaClient();
+const FLASK_APP1 = process.env.NEXT_PUBLIC_FLASK_APP1!;
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME!,
@@ -46,13 +47,15 @@ export async function POST(req: NextRequest) {
       uploadedAt: new Date(),
     },
   });
+  
+const FLASK_APP2 = process.env.NEXT_PUBLIC_FLASK_APP2!
 
   // 🔥 Send the Cloudinary URL to Flask app
-  const flaskResponse = await fetch('http://flask-app1:8080/process-audio-url', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ url: result.secure_url }),
-});
+  const flaskResponse = await fetch(`${FLASK_APP1}/process-audio-url`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ url: result.secure_url }),
+  });
 
   const text = await flaskResponse.text();
 try {
