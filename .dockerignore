@@ -1,0 +1,39 @@
+# Python cache & env
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+ai-model/venv/
+ai-model/__pycache__/
+ai-model/*.pkl
+ai-model/*.ipynb
+ai-model/audio/
+ai-model/uploads/
+
+# Git
+.git/
+.gitignore
+
+# Node (just in case)
+node_modules/
+
+# Logs
+*.log
+
+# Large files not needed in the Docker image
+*.ipynb
+*.pkl
+*.mp3
+*.wav
+uploads/
+audio/
+Dataset/
+
+# Secrets
+.env
+*.env
+
+# Jupyter
+.ipynb_checkpoints/
