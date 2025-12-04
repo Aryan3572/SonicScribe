@@ -2,10 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { v2 as cloudinary } from 'cloudinary';
 import { PrismaClient } from '@prisma/client';
 import { Readable } from 'stream';
+import type { UploadApiResponse } from 'cloudinary';
 
 const prisma = new PrismaClient();
-const FLASK_APP1 = process.env.NEXT_PUBLIC_FLASK_APP1!;
 
+// Cloudinary configuration
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME!,
   api_key: process.env.CLOUDINARY_API_KEY!,
@@ -13,62 +14,83 @@ cloudinary.config({
 });
 
 export async function POST(req: NextRequest) {
-  const formData = await req.formData();
-  const file = formData.get('file') as File;
+  try {
+    const formData = await req.formData();
+    const file = formData.get('file') as File;
 
-  if (!file) {
-    return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
-  }
+    if (!file) {
+      return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
+    }
 
-  const buffer = Buffer.from(await file.arrayBuffer());
-  const stream = Readable.from(buffer);
+    // Convert file to stream
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const stream = Readable.from(buffer);
 
-  const uploadResult = await new Promise((resolve, reject) => {
-    const streamUpload = cloudinary.uploader.upload_stream(
-      {
-        resource_type: 'auto',
-        folder: 'audio-uploads',
+    // Upload to Cloudinary
+    const uploadResult = await new Promise<UploadApiResponse>((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          resource_type: 'auto',
+          folder: 'audio-uploads',
+        },
+        (error, result) => {
+          if (error || !result) return reject(error);
+          resolve(result);
+        }
+      );
+      stream.pipe(uploadStream);
+    });
+
+    // Save record to DB
+    const dbRecord = await prisma.audioFile.create({
+      data: {
+        url: uploadResult.secure_url,
+        publicId: uploadResult.public_id,
+        originalName: file.name,
+        uploadedAt: new Date(),
       },
-      (error, result) => {
-        if (error) return reject(error);
-        resolve(result);
-      }
-    );
-    stream.pipe(streamUpload);
-  });
+    });
 
-  const result = uploadResult as any;
+    // Send URL to Flask backend
+    const flaskResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/analyze-note`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url: uploadResult.secure_url }),
+    });
 
-  const dbRecord = await prisma.audioFile.create({
-    data: {
-      url: result.secure_url,
-      publicId: result.public_id,
-      originalName: file.name,
-      uploadedAt: new Date(),
-    },
-  });
-  
-const FLASK_APP2 = process.env.NEXT_PUBLIC_FLASK_APP2!
+    let flaskData;
+    try {
+      flaskData = await flaskResponse.json();
+    } catch (e) {
+      const rawText = await flaskResponse.text();
+      console.error("❌ Failed to parse Flask JSON. Raw response:", rawText);
+      return NextResponse.json({
+        error: "Invalid JSON from Flask",
+        raw: rawText,
+      }, { status: 500 });
+    }
 
-  // 🔥 Send the Cloudinary URL to Flask app
-  const flaskResponse = await fetch(process.env.NEXT_PUBLIC_BACKEND_UPLOAD_URL!, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ url: result.secure_url }),
-  });
+    if (!flaskData.success) {
+      return NextResponse.json({
+        error: flaskData.error || "Flask backend failed",
+      }, { status: 500 });
+    }
 
-  const text = await flaskResponse.text();
-try {
-  const aiResult = JSON.parse(text);
-  return NextResponse.json({
-    success: true,
-    file: dbRecord,
-    analysis: aiResult.result,
-  });
-} catch (e) {
-  console.error("❌ JSON parsing failed. Raw response:", text);
-  return NextResponse.json({ error: "Flask response not JSON", raw: text }, { status: 500 });
+    // Extract structured response
+    const { transcript, structured, triage } = flaskData.analysis;
+
+    return NextResponse.json({
+      success: true,
+      file: dbRecord,
+      analysis: {
+        transcript,
+        structured, // structured fields like name, age, symptoms, etc.
+        triage,     // optional triage info if provided
+      },
+    });
+
+  } catch (error) {
+    console.error("❌ Unexpected error in POST handler:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+  }
 }
-
-}
-

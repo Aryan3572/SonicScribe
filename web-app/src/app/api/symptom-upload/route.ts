@@ -7,9 +7,6 @@ export async function POST(req: NextRequest) {
 
   const flaskFormData = new FormData();
 
-  
-const FLASK_APP2 = process.env.NEXT_PUBLIC_FLASK_APP2!;
-
   if (textInput) {
     flaskFormData.append('text_input', textInput);
   }
@@ -21,20 +18,32 @@ const FLASK_APP2 = process.env.NEXT_PUBLIC_FLASK_APP2!;
   }
 
   try {
-    const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_SYMPTOM_URL!, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/analyze-symptoms`, {
       method: 'POST',
       body: flaskFormData as any,
     });
 
-const data = await response.json();
+    const data = await response.json();
 
-if (data.success && data.response) {
-  return NextResponse.json({ success: true, result: data.response.trim() });
-} else {
+    if (data.response) {
+  const result =
+    typeof data.response === "string"
+      ? data.response.trim()
+      : JSON.stringify(data.response);
+
   return NextResponse.json({
-    success: false,
-    error: 'Flask returned no response.',
-  }, { status: 500 });
+    success: true,
+    result,
+    transcript: data.transcript || null,
+  });
+} else {
+  return NextResponse.json(
+    {
+      success: false,
+      error: "Flask returned no response.",
+    },
+    { status: 500 }
+  );
 }
 
 
