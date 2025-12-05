@@ -1,6 +1,6 @@
 ﻿'use client'
 import { Separator } from "@/components/ui/separator"
-import { Github, Twitter, Mail } from "lucide-react"
+import { Github, Mail } from "lucide-react"
 
 export default function Footer() {
   return (

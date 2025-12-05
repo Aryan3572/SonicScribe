@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Input } from "@/components/ui/input-form"; // Adjust the import path if needed
 import { Button } from "@/components/ui/button";
-import { TopBar } from "@/components/Topbar";
 
 const SignUp = () => {
   const [name, setName] = useState("");
@@ -23,26 +22,14 @@ const SignUp = () => {
     });
 
     if (res.ok) {
-      // Automatically sign the user in
-      const result = await signIn("credentials", {
-        redirect: false,
-        email: email,
-        password: password,
-      });
-
-      if (result?.ok) {
-        router.push("/"); 
-      } else {
-        console.error("Failed to sign in after signup");
-      }
-    } if (res.status === 400) {
-      alert("User already exists. Please try a different email.");
+      router.push("/auth/signin");
+    } else {
+      alert("Signup failed!");
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-black">
-      <TopBar />
       <div className="bg-gray-900 p-8 shadow-lg rounded-xl w-full max-w-md">
         <h2 className="text-3xl font-bold text-white text-center mb-6">
           Sign Up

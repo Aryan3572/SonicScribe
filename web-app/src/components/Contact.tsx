@@ -38,7 +38,7 @@ export default function Contact() {
                   Do you offer support?
                 </AccordionTrigger>
                 <AccordionContent className="text-sm text-gray-300">
-                  Yes, we're available Monday–Friday for any questions you have.
+                  Yes, we are available Monday–Friday for any questions you have.
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="item-3">
